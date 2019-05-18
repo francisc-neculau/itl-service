@@ -1,0 +1,5 @@
+org\itl\service\ImageToLatexService.class
+org\itl\service\model\BoundingRectangle.class
+org\itl\service\model\Point.class
+org\itl\service\external\IntelligentCharacterRecognizer.class
+org\itl\service\model\CharImage.class
