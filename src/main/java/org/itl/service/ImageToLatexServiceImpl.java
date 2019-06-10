@@ -28,7 +28,7 @@ public class ImageToLatexServiceImpl implements ImageToLatexService{
     public static void main(String...args) {
         String sources = "C:\\ComputerScience\\source\\";
         System.setProperty("log4j.configurationFile", sources + "itl-service\\src\\main\\resources\\log4j2.json");
-        Path imagePath = Paths.get(sources + "itl-icr\\org\\itl\\icr\\resources\\equation_images\\clean\\0.jpg");
+        Path imagePath = Paths.get(sources + "itl-icr\\org\\itl\\icr\\resources\\equation_images\\clean\\complex_first_equation.jpg");
 
         ImageToLatexService itlService = new ImageToLatexServiceImpl();
         String latexEquation = itlService.compute(imagePath);

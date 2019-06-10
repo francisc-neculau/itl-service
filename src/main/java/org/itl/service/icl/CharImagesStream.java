@@ -11,7 +11,7 @@ public class CharImagesStream {
 
     private List<CharImage> charImages;
 
-    private Map<Integer, CharImage> map;
+    private SortedMap<Integer, CharImage> map;
 
     private NavigableSet<Integer> xCoordinatesOfTopLeftPoints;
 
@@ -22,13 +22,13 @@ public class CharImagesStream {
     }
 
     private void init() {
-        this.map = new HashMap<>();
+        this.map = new TreeMap<>();
         this.xCoordinatesOfTopLeftPoints = new TreeSet<>(Comparator.comparingInt(i -> i));
 
         for (CharImage charImage : charImages) {
             int x = charImage.getBoundingRectangle().getTopLeft().getX();
             if(map.put(x, charImage) != null){
-                throw new RuntimeException("Time to refactor!");
+                throw new RuntimeException("Time to refactor!"); // FIXME: !
             };
             xCoordinatesOfTopLeftPoints.add(x);
         }
