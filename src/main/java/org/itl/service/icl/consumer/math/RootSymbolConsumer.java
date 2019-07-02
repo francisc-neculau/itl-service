@@ -1,16 +1,15 @@
 package org.itl.service.icl.consumer.math;
 
-import org.itl.service.icl.CharImagesStream;
+import org.itl.service.icl.CharImageSequence;
 import org.itl.service.icl.consumer.Consumer;
-import org.itl.service.icl.consumer.ConsumerResolver;
 import org.itl.service.icl.consumer.RootConsumer;
 import org.itl.service.model.CharImage;
 
 public class RootSymbolConsumer implements Consumer {
     @Override
-    public String consume(CharImage rootSymbol, CharImagesStream charImagesStream) {
+    public String consume(CharImage rootSymbol, CharImageSequence sequence) {
         String result = "\\sqrt{";
-        result += RootConsumer.getInstance().consume(charImagesStream.crop(
+        result += RootConsumer.getInstance().consume(sequence.crop(
                 rootSymbol.getBoundingRectangle().getTopLeft(),
                 rootSymbol.getBoundingRectangle().getBottomRight()
         ));

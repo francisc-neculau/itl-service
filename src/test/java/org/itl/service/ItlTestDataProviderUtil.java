@@ -77,4 +77,20 @@ public final class ItlTestDataProviderUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static List<CharImage> getCharImagesForSimpleEquation1WithGreekLetters() {
+        try {
+            return parser.parse(Paths.get("src\\test\\resources\\simple_equation_1_with_greek_letters"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<CharImage> getCharImagesForSimpleEquationWithArrow() {
+        try {
+            return parser.parse(Paths.get("src\\test\\resources\\simple_equation_with_arrow"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -9,7 +9,7 @@ public class IclServiceImpl implements IclService {
 
     @Override
     public String assemble(List<CharImage> charImages) {
-        CharImagesStream charImagesStream = new CharImagesStream(charImages);
-        return RootConsumer.getInstance().consume(charImagesStream);
+        CharImageSequence charImagesStream = new CharImageSequence(charImages);
+        return RootConsumer.getInstance().consume(charImagesStream).trim();
     }
 }

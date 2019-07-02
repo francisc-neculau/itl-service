@@ -1,6 +1,6 @@
 package org.itl.service.icl.consumer;
 
-import org.itl.service.icl.CharImagesStream;
+import org.itl.service.icl.CharImageSequence;
 import org.itl.service.model.CharImage;
 import org.itl.service.model.Point;
 
@@ -23,32 +23,32 @@ public class SuperscriptConsumer implements Consumer {
      * A, B, C and D.
      *
      * @param charImage current char image, X, that has a superscript.
-     * @param charImagesStream the stream of all other char images.
+     * @param sequence the stream of all other char images.
      * @return
      */
     @Override
-    public String consume(CharImage charImage, CharImagesStream charImagesStream) {
-        int offset = (charImage.getBoundingRectangle().getBottomRight().getY() -
-                charImage.getBoundingRectangle().getTopLeft().getY()) / 3;
+    public String consume(CharImage charImage, CharImageSequence sequence) {
+        int offset = (charImage.getBoundingRectangle().getBottomY() -
+                charImage.getBoundingRectangle().getTopY()) / 4;
         int y = charImage.getBoundingRectangle().getBottomRight().getY() - offset;
-        Optional<CharImage> optional = charImagesStream.firstIntersectionWithY(y);
+        Optional<CharImage> optional = sequence.firstIntersectionWithY(y);
         if(optional.isPresent()) {
             CharImage nextCharImage = optional.get();
             int x = nextCharImage.getBoundingRectangle().getTopLeft().getX() - 1;
             Point B = new Point(x, y);
             Point A = new Point(charImage.getBoundingRectangle().getBottomRight().getX() + 1, y);
-            int lowestIntersectingY = charImagesStream.lowestIntersectingY(A, B) - 1;
+            int lowestIntersectingY = sequence.lowestIntersectingY(A, B) - 1;
             Point D = new Point(A.getX(), lowestIntersectingY);
             // Point C = calculate it !
             String result = charImage.getCharType().getName() + "^{";
-            CharImagesStream superscriptCharImagesStream = charImagesStream.crop(D, B);
+            CharImageSequence superscriptCharImagesStream = sequence.crop(D, B);
             result += RootConsumer.getInstance().consume(superscriptCharImagesStream);
             result += "}";
             return result;
         } else {
             // this charImage is the last in the equation.
             String result = charImage.getCharType().getName() + "^{";
-            result += RootConsumer.getInstance().consume(charImagesStream);
+            result += RootConsumer.getInstance().consume(sequence);
             result += "}";
             return result;
         }

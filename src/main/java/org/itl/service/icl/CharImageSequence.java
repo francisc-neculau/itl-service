@@ -5,9 +5,8 @@ import org.itl.service.model.CharImage;
 import org.itl.service.model.Point;
 
 import java.util.*;
-import java.util.function.Function;
 
-public class CharImagesStream {
+public class CharImageSequence {
 
     private List<CharImage> charImages;
 
@@ -15,7 +14,7 @@ public class CharImagesStream {
 
     private NavigableSet<Integer> xCoordinatesOfTopLeftPoints;
 
-    CharImagesStream(List<CharImage> charImages) {
+    CharImageSequence(List<CharImage> charImages) {
         this.charImages = new ArrayList<>();
         this.charImages.addAll(charImages);
         init();
@@ -54,7 +53,7 @@ public class CharImagesStream {
      * @param bottomRight
      * @return
      */
-    public CharImagesStream crop(Point topLeft, Point bottomRight) {
+    public CharImageSequence crop(Point topLeft, Point bottomRight) {
         SortedSet<Integer> aux = xCoordinatesOfTopLeftPoints.subSet(topLeft.getX(), bottomRight.getX());
 
         SortedSet<Integer> subSet = new TreeSet<>();
@@ -74,7 +73,7 @@ public class CharImagesStream {
         }
 //        xCoordinatesOfTopLeftPoints.removeAll(subSet);
 
-        return new CharImagesStream(charImages);
+        return new CharImageSequence(charImages);
     }
 
     public boolean hasNext() {
@@ -134,34 +133,95 @@ public class CharImagesStream {
                 y < charImage.getBoundingRectangle().getBottomRight().getY();
     }
 
-    public int highestIntersectingY(Point bottomLeft, Point bottomRight) {
-        SortedSet<Integer> subSet = xCoordinatesOfTopLeftPoints.subSet(bottomLeft.getX(), true, bottomRight.getX(), true);
-        // it may be the highest.
-        int maxY = 0;
+    /**
+     *  This method tries to find the highest y coordinate that
+     * intersects any CharImage within the boundaries defined
+     * by points A and B along with a maxDistance.
+     *  If no such y exits, it returns -1.
+     *  FIXME: Maybe a new checked exception ?
+     *
+     * (A)+------------+(B)
+     *    .  |    |    .
+     *    .  |    |    .
+     *    .  |    |    .
+     *    .  |    +(C) .
+     *    .  |         .
+     *  ..................
+     *      /\
+     *   maxDistance
+     *
+     * @param topLeft
+     * @param topRight
+     * @param maxDistance
+     * @return
+     */
+    public int highestIntersectingY(Point topLeft, Point topRight, int maxDistance) {
+        SortedSet<Integer> subSet = xCoordinatesOfTopLeftPoints.subSet(topLeft.getX(), true, topRight.getX(), true);
+        int baseY = topLeft.getY();
+        int maxY = -1;
+        int currentY;
         for(Integer x : subSet) {
-            if(maxY < map.get(x).getBoundingRectangle().getBottomRight().getY()) {
-                maxY = map.get(x).getBoundingRectangle().getBottomRight().getY();
+            currentY = map.get(x).getBoundingRectangle().getBottomRight().getY();
+            if(maxDistance > 0 && (currentY - baseY) > maxDistance) {
+                continue;
             }
-        }
-        if(maxY == 0) {
-            throw new RuntimeException("time to refactor");
+            if(maxY < currentY) {
+                maxY = currentY;
+            }
         }
         return maxY;
     }
 
-    public int lowestIntersectingY(Point bottomLeft, Point bottomRight) {
+    public int highestIntersectingY(Point topLeft, Point topRight) {
+        return highestIntersectingY(topLeft, topRight, 0);
+    }
+
+    /**
+     *  This method tries to find the lowest y coordinate that
+     * intersects any CharImage within the boundaries defined
+     * by points A and B along with a maxDistance.
+     *  If no such y exits, it returns -1.
+     *  FIXME: Maybe a new checked exception ?
+     *
+     *   maxDistance
+     *      \/
+     *  ..................
+     *    .  |         .
+     *    .  |    +(C) .
+     *    .  |    |    .
+     *    .  |    |    .
+     *    .  |    |    .
+     * (A)+------------+(B)
+     *
+     * @param bottomLeft
+     * @param bottomRight
+     * @param maxDistance
+     * @return
+     */
+    public int lowestIntersectingY(Point bottomLeft, Point bottomRight, int maxDistance) {
         SortedSet<Integer> subSet = xCoordinatesOfTopLeftPoints.subSet(bottomLeft.getX(), true, bottomRight.getX(), true);
+        // if no element found in the slice, then -1
+        if(subSet.isEmpty()) {
+            return -1;
+        }
+        int baseY = bottomLeft.getY();
         // it may be the lowest.
-        int minY = map.get(subSet.first()).getBoundingRectangle().getTopLeft().getY();
+        int minY = map.get(subSet.first()).getBoundingRectangle().getTopY();
+        int currentY;
         for(Integer x : subSet) {
-            if(minY > map.get(x).getBoundingRectangle().getTopLeft().getY()) {
-                minY = map.get(x).getBoundingRectangle().getTopLeft().getY();
+            currentY = map.get(x).getBoundingRectangle().getTopY();
+            if(maxDistance > 0 && (baseY - minY) > maxDistance) {
+                continue;
+            }
+            if(minY > currentY) {
+                minY = currentY;
             }
         }
-        if(minY == 0) {
-            throw new RuntimeException("time to refactor");
-        }
         return minY;
+    }
+
+    public int lowestIntersectingY(Point bottomLeft, Point bottomRight) {
+        return lowestIntersectingY(bottomLeft, bottomRight, 0);
     }
 
     private SortedSet<Integer> verticalSlice(int leftX, int rightX) {

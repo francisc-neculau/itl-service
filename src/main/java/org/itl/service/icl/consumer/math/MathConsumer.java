@@ -1,9 +1,7 @@
 package org.itl.service.icl.consumer.math;
 
-import org.itl.service.icl.CharImagesStream;
+import org.itl.service.icl.CharImageSequence;
 import org.itl.service.icl.consumer.Consumer;
-import org.itl.service.icl.consumer.SuperscriptConsumer;
-import org.itl.service.icl.consumer.SuperscriptConsumer;
 import org.itl.service.model.CharImage;
 import org.itl.service.model.CharType;
 
@@ -13,19 +11,23 @@ public class MathConsumer implements Consumer {
 
     private Consumer fractionSymbolConsumer;
 
+    private Consumer integralConsumer;
+
     public MathConsumer() {
         this.rootSymbolConsumer = new RootSymbolConsumer();
         this.fractionSymbolConsumer = new FractionSymbolConsumer();
+        this.integralConsumer = new IntegralConsumer();
     }
 
     @Override
-    public String consume(CharImage charImage, CharImagesStream charImagesStream) {
+    public String consume(CharImage charImage, CharImageSequence sequence) {
         if(charImage.getCharType() == CharType.RootSymbol) {
-            return rootSymbolConsumer.consume(charImage, charImagesStream);
+            return rootSymbolConsumer.consume(charImage, sequence);
+        } else if(charImage.getCharType() == CharType.FractionSlash) {
+            return fractionSymbolConsumer.consume(charImage, sequence);
+        } else if(charImage.getCharType() == CharType.IntegralSymbol) {
+            return integralConsumer.consume(charImage, sequence);
         }
-        if(charImage.getCharType() == CharType.FractionSlash) {
-            return fractionSymbolConsumer.consume(charImage, charImagesStream);
-        }
-        return charImage.getCharType().getName();
+        return charImage.getCharType().getLatexName();
     }
 }

@@ -26,6 +26,26 @@ public class BoundingRectangle {
         return topLeft;
     }
 
+    public int getTopY() {
+        return topLeft.getY();
+    }
+
+    public int getBottomY() {
+        return bottomRight.getY();
+    }
+
+    public Point getTopRight() {
+        return new Point(bottomRight.getX(), topLeft.getY());
+    }
+
+    public int getRightX() {
+        return bottomRight.getX();
+    }
+
+    public int getLeftX() {
+        return topLeft.getX();
+    }
+
     public boolean contains(BoundingRectangle other) {
         boolean result = true;
 

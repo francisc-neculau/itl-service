@@ -35,6 +35,8 @@ public enum CharType {
     // GREEK
     Omega("U+005a", "Omega", Group.Greek), omega("U+005a", "omega", Group.Greek),
     Pi("U+005a", "Pi", Group.Greek), pi("U+005a", "pi", Group.Greek),
+    Xi("U+005a", "Xi", Group.Greek), xi("U+005a", "xi", Group.Greek),
+    Lambda("U+005a", "Lambda", Group.Greek), lambda("U+005a", "lambda", Group.Greek),
 
     // DIGITS
     One("U+0031", "1", Group.Digit), Two("U+0032", "2", Group.Digit),
@@ -54,9 +56,11 @@ public enum CharType {
     Asterisk("U+2217", "*", Group.MathematicalSymbol), // this may indicate a fraction
     FullStop("U+002E", ".", Group.Other), // this may indicate also a bullet or a multiplication
 
+    RightArrow("U+2192", "->", "\\rightarrow", Group.Arrows), // It's under Arrows Group in UNICODE.
+
     RootSymbol("U+221A", "sqrt", Group.MathematicalSymbol),
-    IntegralSymbol("U+222B", "integral", Group.MathematicalSymbol),
-    infinitySymbol("U+221E", "infinity", Group.MathematicalSymbol),
+    IntegralSymbol("U+222B", "integral", "int_", Group.MathematicalSymbol),
+    infinitySymbol("U+221E", "infinity", "\\infty", Group.MathematicalSymbol),
 
     Undefined("U+", "undefined", Group.Other);
     /**
@@ -64,9 +68,17 @@ public enum CharType {
      */
     private String unicodeId;
     /**
-     * This string represents how this will be displayed using only ASCII.
+     * This name is used to read and map incoming CharTypes via
+     * protobuf. In this sense it acts like a unique identifier.
+     * FIXME: Maybe the unicodeId would be a better fit for this task.
      */
     private String name;
+    /**
+     *  This is the latex name of this particular CharType.
+     * It can be used when creating TeX code. It usually is the
+     * same as the name.
+     */
+    private String latexName;
     /**
      * Indicates to what group it belongs.
      */
@@ -79,6 +91,14 @@ public enum CharType {
     CharType(String unicodeId, String name, Group group) {
         this.unicodeId = unicodeId;
         this.name = name;
+        this.latexName = name;
+        this.group = group;
+    }
+
+    CharType(String unicodeId, String name, String latexName, Group group) {
+        this.unicodeId = unicodeId;
+        this.name = name;
+        this.latexName = latexName;
         this.group = group;
     }
 
@@ -88,6 +108,10 @@ public enum CharType {
 
     public String getName() {
         return name;
+    }
+
+    public String getLatexName() {
+        return latexName;
     }
 
     @Override

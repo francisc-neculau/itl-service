@@ -56,6 +56,18 @@ public class IclServiceTest {
     @Test
     public void complexFirstEquation() {
         String latexEquation = unit.assemble(ItlTestDataProviderUtil.getCharImagesForComplexFirstEquation());
-        Assertions.assertEquals("Q\\left(z\\right)=\\frac{1}{\\sqrt{2\\pi}}\\int_{z}^{\\infty}e^{\\frac{-x^{2}}{2}}dx", latexEquation);
+        Assertions.assertEquals("Q\\left(z\\right)=\\frac{1}{\\sqrt{2\\pi }}\\int_{z}^{\\infty}e^{\\frac{-x^{2}}{2}}dx", latexEquation);
+    }
+
+    @Test
+    public void getCharImagesForSimpleEquation1WithGreekLetters() {
+        String latexEquation = unit.assemble(ItlTestDataProviderUtil.getCharImagesForSimpleEquation1WithGreekLetters());
+        Assertions.assertEquals("\\lambda / 25=10\\xi", latexEquation);
+    }
+
+    @Test
+    public void getCharImagesForSimpleEquationWithArrow() {
+        String latexEquation = unit.assemble(ItlTestDataProviderUtil.getCharImagesForSimpleEquationWithArrow());
+        Assertions.assertEquals("4q\\rightarrow y", latexEquation);
     }
 }

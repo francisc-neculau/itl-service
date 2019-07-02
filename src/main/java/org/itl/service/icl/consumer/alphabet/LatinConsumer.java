@@ -1,9 +1,8 @@
 package org.itl.service.icl.consumer.alphabet;
 
-import org.itl.service.icl.CharImagesStream;
+import org.itl.service.icl.CharImageSequence;
 import org.itl.service.icl.consumer.Consumer;
 import org.itl.service.icl.consumer.SuperscriptConsumer;
-import org.itl.service.icl.consumer.math.RootSymbolConsumer;
 import org.itl.service.model.CharImage;
 
 /**
@@ -20,11 +19,11 @@ public class LatinConsumer implements Consumer {
     }
 
     @Override
-    public String consume(CharImage charImage, CharImagesStream charImagesStream) {
+    public String consume(CharImage charImage, CharImageSequence sequence) {
         if(charImage.getCharType().isLatinLoweCase()) {
             // check if it has superscript
-            if(charImagesStream.hasSuperscript(charImage)) {
-                return superscriptConsumer.consume(charImage, charImagesStream);
+            if(sequence.hasSuperscript(charImage)) {
+                return superscriptConsumer.consume(charImage, sequence);
             }
         }
         return charImage.getCharType().getName();

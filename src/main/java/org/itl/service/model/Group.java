@@ -6,5 +6,6 @@ public enum Group {
     Digit,
     MathematicalSymbol,
     Parenthesis,
+    Arrows,
     Other,
 }
