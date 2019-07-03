@@ -57,6 +57,6 @@ public class ImageToLatexServiceTest {
     @Test
     public void complexFirstEquation() {
         String latexEquation = unit.compute(Paths.get("src\\test\\resources\\complex_first_equation.jpg"));
-        Assertions.assertEquals("Q\\left(z\\right)=\\frac{1}{\\sqrt{2\\pi}}\\int_{z}^{\\infty}e^{\\frac{-x^{2}}{2}}dx", latexEquation);
+        Assertions.assertEquals("Q\\left(z\\right)=\\frac{1}{\\sqrt{2\\pi }}\\int_{z}^{\\infty}e^{\\frac{-x^{2}}{2}}dx", latexEquation);
     }
 }

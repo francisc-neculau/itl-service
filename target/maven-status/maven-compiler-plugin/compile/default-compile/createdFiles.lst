@@ -10,6 +10,7 @@ org\itl\service\icl\consumer\SuperscriptConsumer.class
 org\itl\service\model\Group.class
 org\itl\service\external\SegmentationResultOuterClass$SegmentationResultOrBuilder.class
 org\itl\service\icl\consumer\alphabet\LatinConsumer.class
+org\itl\service\icl\consumer\ArrowsConsumer.class
 org\itl\service\icl\IclService.class
 org\itl\service\external\SegmentationResultOuterClass$1.class
 org\itl\service\icl\consumer\math\RootSymbolConsumer.class

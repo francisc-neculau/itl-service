@@ -48,15 +48,19 @@ public class ScriptCallBasedIcrService implements IcrService {
 
     private void executeIcrScript(Path inputImagePath) {
         StringBuilder command = new StringBuilder();
-        command.append(icrPythonExe).append(" ");
-        command.append(icrMainPyScript).append(" ");
-        command.append(inputImagePath.toString()).append(" ");
-        command.append(protobufResultsPath.toString());
+        command.append("\"")
+                .append(icrPythonExe).append("\" ");
+        command.append("\"")
+                .append(icrMainPyScript).append("\" ");
+        command.append("\"")
+                .append(inputImagePath.toString()).append("\" ");
+        command.append("\"")
+                .append(protobufResultsPath.toString()).append("\"");
         try {
             Process process = Runtime.getRuntime().exec(command.toString());
             int exitValue = process.waitFor();
             if (exitValue != 0) {
-                throw new IcrServiceException("ICR main.py execution failed with exit value " + exitValue);
+                //throw new IcrServiceException("ICR main.py execution failed with exit value " + exitValue);
             }
         } catch (IOException | InterruptedException e) {
             throw new IcrServiceException("ICR main.py execution error", e);
